@@ -1,41 +1,46 @@
 package com.example.vkclientappcompose
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.example.vkclientappcompose.presentation.MainViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.vkclientappcompose.presentation.navigation.AppNavGraph
+import com.example.vkclientappcompose.presentation.navigation.rememberNavigationState
+import com.example.vkclientappcompose.presentation.screens.CommentsScreen
+import com.example.vkclientappcompose.presentation.screens.HomeScreen
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel
-) {
+fun MainScreen() {
+    val navigationState = rememberNavigationState()
+
     Scaffold(
         bottomBar = {
             BottomNavigation {
-                val selectedItemPosition = remember {
-                    mutableStateOf(0)
-                }
+                val navBackStackEntry by navigationState.navHostController.currentBackStackEntryAsState()
+
                 val items = listOf(
                     NavigationItem.Home,
                     NavigationItem.Favourite,
                     NavigationItem.Profile
                 )
-                items.forEachIndexed { index, navigationItem ->
+                items.forEach { navigationItem ->
+
+                    val selected = navBackStackEntry?.destination?.hierarchy?.any {
+                        it.route == navigationItem.screen.route
+                    } ?: false
+
                     BottomNavigationItem(
-                        selected = selectedItemPosition.value == index,
-                        onClick = { selectedItemPosition.value = index },
+                        selected = selected,
+                        onClick = {
+                            navigationState.navigateTo(navigationItem.screen.route)
+                        },
                         icon = {
                             Icon(imageVector = navigationItem.icon, contentDescription = null)
                         },
@@ -48,51 +53,31 @@ fun MainScreen(
                 }
             }
         }
-    ) {
-        val feedPosts = viewModel.feedPosts.observeAsState(listOf())
-
-        LazyColumn(
-            modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(
-                top = 16.dp,
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 56.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = feedPosts.value,
-                key = { it.id }
-            ) { feedPost ->
-                val dismissState = rememberDismissState()
-                if (dismissState.isDismissed(DismissDirection.EndToStart)) {
-                    viewModel.remove(feedPost)
-                }
-                SwipeToDismiss(
-                    modifier = Modifier.animateItemPlacement(),
-                    state = dismissState,
-                    background = {},
-                    directions = setOf(DismissDirection.EndToStart)
-                ) {
-                    PostCard(
-                        feedPost = feedPost,
-                        onViewsClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onCommentClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onLikeClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        },
-                        onShareClickListener = { statisticItem ->
-                            viewModel.updateCount(feedPost, statisticItem)
-                        }
-                    )
-                }
-
+    ) { paddingValues ->
+        AppNavGraph(
+            navHostController = navigationState.navHostController,
+            newsFeedScreenContent = {
+                HomeScreen(
+                    paddingValues = paddingValues,
+                    onCommentClickListener = {
+                        navigationState.navigateToComments(it)
+                    }
+                )
+            },
+            commentsScreenContent = { feedPost ->
+                CommentsScreen(
+                    onBackPressed = {
+                        navigationState.navHostController.popBackStack()
+                    },
+                    feedPost = feedPost
+                )
+            },
+            favouritesScreenContent = {
+                Text(text = "Favourite")
+            },
+            profileScreenContent = {
+                Text(text = "Profile")
             }
-        }
+        )
     }
 }
