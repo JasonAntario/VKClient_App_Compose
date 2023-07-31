@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation.viewmodels
+package com.example.vkclientappcompose.presentation.comments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

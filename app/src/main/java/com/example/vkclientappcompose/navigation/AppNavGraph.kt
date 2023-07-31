@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation.navigation
+package com.example.vkclientappcompose.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

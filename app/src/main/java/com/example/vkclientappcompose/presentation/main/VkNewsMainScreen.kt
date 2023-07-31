@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose
+package com.example.vkclientappcompose.presentation.main
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -11,10 +11,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.vkclientappcompose.presentation.navigation.AppNavGraph
-import com.example.vkclientappcompose.presentation.navigation.rememberNavigationState
-import com.example.vkclientappcompose.presentation.screens.CommentsScreen
-import com.example.vkclientappcompose.presentation.screens.HomeScreen
+import com.example.vkclientappcompose.navigation.AppNavGraph
+import com.example.vkclientappcompose.navigation.rememberNavigationState
+import com.example.vkclientappcompose.presentation.comments.CommentsScreen
+import com.example.vkclientappcompose.presentation.news.NewsFeedScreen
 
 @Composable
 fun MainScreen() {
@@ -57,7 +57,7 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
-                HomeScreen(
+                NewsFeedScreen(
                     paddingValues = paddingValues,
                     onCommentClickListener = {
                         navigationState.navigateToComments(it)

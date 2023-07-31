@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation
+package com.example.vkclientappcompose.presentation.comments
 
 import com.example.vkclientappcompose.domain.FeedPost
 import com.example.vkclientappcompose.domain.PostComment

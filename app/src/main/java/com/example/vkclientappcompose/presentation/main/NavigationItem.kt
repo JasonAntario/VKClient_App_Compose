@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose
+package com.example.vkclientappcompose.presentation.main
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -6,7 +6,8 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.vkclientappcompose.presentation.navigation.Screen
+import com.example.vkclientappcompose.R
+import com.example.vkclientappcompose.navigation.Screen
 
 sealed class NavigationItem(
     val screen: Screen,

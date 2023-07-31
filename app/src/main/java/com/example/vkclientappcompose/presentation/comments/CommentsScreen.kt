@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation.screens
+package com.example.vkclientappcompose.presentation.comments
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,9 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vkclientappcompose.domain.FeedPost
 import com.example.vkclientappcompose.domain.PostComment
-import com.example.vkclientappcompose.presentation.CommentsScreenState
-import com.example.vkclientappcompose.presentation.viewmodels.CommentsViewModel
-import com.example.vkclientappcompose.presentation.viewmodels.CommentsViewModelFactory
 
 @Composable
 fun CommentsScreen(

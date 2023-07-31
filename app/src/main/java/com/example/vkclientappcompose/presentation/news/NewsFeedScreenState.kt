@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation
+package com.example.vkclientappcompose.presentation.news
 
 import com.example.vkclientappcompose.domain.FeedPost
 

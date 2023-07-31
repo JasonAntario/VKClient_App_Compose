@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.presentation.navigation
+package com.example.vkclientappcompose.navigation
 
 import android.net.Uri
 import com.example.vkclientappcompose.domain.FeedPost
