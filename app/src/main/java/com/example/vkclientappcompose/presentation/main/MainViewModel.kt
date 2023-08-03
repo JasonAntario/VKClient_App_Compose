@@ -1,6 +1,7 @@
 package com.example.vkclientappcompose.presentation.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +17,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val storage = VKPreferencesKeyValueStorage(application)
         val token = VKAccessToken.restore(storage)
+        Log.i(TAG, "TOKEN - ${token?.accessToken}")
         val isLoggedIn = token != null && token.isValid
         _authState.value = if (isLoggedIn) AuthState.Authorized else AuthState.NotAuthorized
     }
@@ -30,5 +32,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _authState.value = AuthState.Authorized
             }
         }
+    }
+
+    companion object{
+        private const val TAG = "MainViewModel"
     }
 }
