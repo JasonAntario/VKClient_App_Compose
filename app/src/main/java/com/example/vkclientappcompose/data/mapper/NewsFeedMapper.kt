@@ -1,8 +1,10 @@
 package com.example.vkclientappcompose.data.mapper
 
 import android.util.Log
+import com.example.vkclientappcompose.data.model.CommentsResponseDto
 import com.example.vkclientappcompose.data.model.NewsFeedResponseDto
 import com.example.vkclientappcompose.domain.FeedPost
+import com.example.vkclientappcompose.domain.PostComment
 import com.example.vkclientappcompose.domain.StatisticItem
 import com.example.vkclientappcompose.domain.StatisticType
 import java.text.SimpleDateFormat
@@ -24,7 +26,7 @@ class NewsFeedMapper {
                 id = post.id,
                 communityId = post.communityId,
                 communityName = group.name,
-                publicationDate = mapTimestampToDate(post.date * 1000),
+                publicationDate = mapTimestampToDate(post.date),
                 communityImageUrl = group.imageUrl,
                 contentText = post.text,
                 contentImageUrl = post.attachments?.firstOrNull()?.photo?.photoUrls?.last()?.url,
@@ -43,7 +45,26 @@ class NewsFeedMapper {
     }
 
     private fun mapTimestampToDate(timestamp: Long): String {
-        val date = Date(timestamp)
-        return SimpleDateFormat("d MMMM yyyy, HH:mm", Locale.getDefault()).format(date)
+        val date = Date(timestamp * 1000)
+        return SimpleDateFormat("d MMMM yyyy, hh:mm", Locale.getDefault()).format(date)
+    }
+
+    fun mapResponseToComments(commentsResponseDto: CommentsResponseDto): List<PostComment> {
+        val result = mutableListOf<PostComment>()
+        val comments = commentsResponseDto.content.items
+        val profiles = commentsResponseDto.content.profiles
+        for (comment in comments) {
+            if (comment.text.isBlank()) continue
+            val author = profiles.firstOrNull { it.id == comment.authorId } ?: continue
+            val postComment = PostComment(
+                id = comment.id,
+                authorName = "${author.firstName} ${author.lastName}",
+                authorAvatarUrl = author.avatarUrl,
+                commentText = comment.text,
+                publicationDate = mapTimestampToDate(comment.date)
+            )
+            result.add(postComment)
+        }
+        return result
     }
 }
