@@ -1,8 +1,7 @@
 package com.example.vkclientappcompose.data.repository
 
-import android.app.Application
 import com.example.vkclientappcompose.data.mapper.NewsFeedMapper
-import com.example.vkclientappcompose.data.network.ApiFactory
+import com.example.vkclientappcompose.data.network.ApiService
 import com.example.vkclientappcompose.domain.entity.AuthState
 import com.example.vkclientappcompose.domain.entity.FeedPost
 import com.example.vkclientappcompose.domain.entity.PostComment
@@ -21,10 +20,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
+class NewsFeedRepositoryImpl @Inject constructor(
+    private val apiService: ApiService,
+    private val storage: VKPreferencesKeyValueStorage,
+    private val mapper: NewsFeedMapper,
+) : NewsFeedRepository {
 
-    private val storage = VKPreferencesKeyValueStorage(application)
     private val token
         get() = VKAccessToken.restore(storage)
 
@@ -58,10 +61,6 @@ class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
         delay(RETRY_TIMEOUT_MILLIS)
         true
     }
-
-    private val apiService = ApiFactory.apiService
-    private val mapper = NewsFeedMapper()
-
 
     private val _feedPosts = mutableListOf<FeedPost>()
     private val feedPosts: List<FeedPost>
@@ -105,7 +104,7 @@ class NewsFeedRepositoryImpl(application: Application): NewsFeedRepository {
         nextDataNeededEvent.emit(Unit)
     }
 
-    override suspend fun checkAuthState(){
+    override suspend fun checkAuthState() {
         checkAuthStateEvents.emit(Unit)
     }
 
