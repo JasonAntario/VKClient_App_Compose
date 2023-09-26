@@ -1,4 +1,4 @@
-package com.example.vkclientappcompose.domain
+package com.example.vkclientappcompose.domain.entity
 
 data class PostComment(
     val id: Long,

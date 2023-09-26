@@ -3,10 +3,10 @@ package com.example.vkclientappcompose.data.mapper
 import android.util.Log
 import com.example.vkclientappcompose.data.model.CommentsResponseDto
 import com.example.vkclientappcompose.data.model.NewsFeedResponseDto
-import com.example.vkclientappcompose.domain.FeedPost
-import com.example.vkclientappcompose.domain.PostComment
-import com.example.vkclientappcompose.domain.StatisticItem
-import com.example.vkclientappcompose.domain.StatisticType
+import com.example.vkclientappcompose.domain.entity.FeedPost
+import com.example.vkclientappcompose.domain.entity.PostComment
+import com.example.vkclientappcompose.domain.entity.StatisticItem
+import com.example.vkclientappcompose.domain.entity.StatisticType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

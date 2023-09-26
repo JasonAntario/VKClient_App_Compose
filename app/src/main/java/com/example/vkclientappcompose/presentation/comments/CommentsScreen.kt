@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.vkclientappcompose.domain.FeedPost
-import com.example.vkclientappcompose.domain.PostComment
+import com.example.vkclientappcompose.domain.entity.FeedPost
+import com.example.vkclientappcompose.domain.entity.PostComment
 
 @Composable
 fun CommentsScreen(
